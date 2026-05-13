@@ -3,811 +3,187 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Benjamín Merlet — Operaciones & Logística</title>
+  <title>Benjamín Merlet Arrieta — Operaciones & Logística</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
-    /* ============================
-       VARIABLES & RESET
-    ============================ */
     :root {
-      --bg:        #020b18;
-      --bg2:       #030f20;
-      --cyan:      #00e5ff;
-      --cyan-dim:  #00b8d4;
-      --blue:      #1565c0;
-      --blue-el:   #2979ff;
-      --white:     #e8f4fd;
-      --grey:      #4a6fa5;
-      --card-bg:   rgba(3, 20, 45, 0.85);
-      --border:    rgba(0, 229, 255, 0.18);
-      --glow:      0 0 18px rgba(0,229,255,0.35);
-      --glow-lg:   0 0 40px rgba(0,229,255,0.25), 0 0 80px rgba(41,121,255,0.12);
+      --bg:#020b18; --bg2:#030f20;
+      --cyan:#00e5ff; --cyan-dim:#00b8d4;
+      --blue:#1565c0; --blue-el:#2979ff;
+      --white:#e8f4fd; --grey:#4a6fa5;
+      --card-bg:rgba(3,20,45,0.85);
+      --border:rgba(0,229,255,0.18);
+      --glow:0 0 18px rgba(0,229,255,0.35);
+      --glow-lg:0 0 40px rgba(0,229,255,0.25),0 0 80px rgba(41,121,255,0.12);
     }
-    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Exo 2', sans-serif;
-      background: var(--bg);
-      color: var(--white);
-      overflow-x: hidden;
-      cursor: default;
-    }
-    ::selection { background: var(--cyan); color: #000; }
-    a { color: var(--cyan); text-decoration: none; }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{font-family:"Exo 2",sans-serif;background:var(--bg);color:var(--white);overflow-x:hidden;}
+    ::selection{background:var(--cyan);color:#000;}
+    a{color:var(--cyan);text-decoration:none;}
 
-    /* ============================
-       SPLASH SCREEN
-    ============================ */
-    #splash {
-      position: fixed; inset: 0;
-      z-index: 9999;
-      background: #000;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 20px;
-      transition: opacity 0.6s ease, visibility 0.6s;
-    }
-    #splash.hide { opacity: 0; visibility: hidden; }
-    .splash-name {
-      font-family: 'Orbitron', sans-serif;
-      font-size: clamp(1.4rem, 5vw, 2.6rem);
-      font-weight: 900;
-      color: var(--cyan);
-      letter-spacing: 0.12em;
-      text-shadow: var(--glow-lg);
-      animation: splashPulse 0.8s ease infinite alternate;
-    }
-    .splash-sub {
-      font-family: 'Exo 2', sans-serif;
-      font-size: clamp(0.75rem, 2vw, 1rem);
-      color: var(--grey);
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-    }
-    .splash-bar-wrap {
-      width: min(280px, 70vw);
-      height: 2px;
-      background: rgba(255,255,255,0.06);
-      border-radius: 2px;
-      overflow: hidden;
-    }
-    .splash-bar {
-      height: 100%;
-      background: linear-gradient(90deg, var(--blue-el), var(--cyan));
-      border-radius: 2px;
-      animation: loadBar 2s ease forwards;
-    }
-    @keyframes loadBar { from { width:0 } to { width:100% } }
-    @keyframes splashPulse {
-      from { text-shadow: 0 0 12px rgba(0,229,255,0.4); }
-      to   { text-shadow: 0 0 32px rgba(0,229,255,0.9), 0 0 60px rgba(0,229,255,0.3); }
-    }
+    #splash{position:fixed;inset:0;z-index:9999;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;transition:opacity .6s ease,visibility .6s;}
+    #splash.hide{opacity:0;visibility:hidden;}
+    .splash-name{font-family:"Orbitron",sans-serif;font-size:clamp(1.1rem,5vw,2rem);font-weight:900;color:var(--cyan);letter-spacing:.12em;animation:splashPulse .8s ease infinite alternate;}
+    .splash-sub{font-size:.75rem;color:var(--grey);letter-spacing:.3em;text-transform:uppercase;}
+    .splash-bar-wrap{width:min(260px,70vw);height:2px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;}
+    .splash-bar{height:100%;background:linear-gradient(90deg,var(--blue-el),var(--cyan));animation:loadBar 2s ease forwards;}
+    @keyframes loadBar{from{width:0}to{width:100%}}
+    @keyframes splashPulse{from{text-shadow:0 0 12px rgba(0,229,255,.4);}to{text-shadow:0 0 32px rgba(0,229,255,.9),0 0 60px rgba(0,229,255,.3);}}
 
-    /* ============================
-       CANVAS PARTICLES
-    ============================ */
-    #particles {
-      position: fixed; inset: 0;
-      z-index: 0;
-      pointer-events: none;
-    }
+    #particles{position:fixed;inset:0;z-index:0;pointer-events:none;}
+    .scan-line{position:fixed;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:.07;pointer-events:none;z-index:9998;animation:scanDown 8s linear infinite;}
+    @keyframes scanDown{from{top:0}to{top:100vh}}
 
-    /* ============================
-       NAVBAR
-    ============================ */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 14px 5%;
-      background: rgba(2,11,24,0.8);
-      backdrop-filter: blur(14px);
-      border-bottom: 1px solid var(--border);
-    }
-    .nav-logo {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--cyan);
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-    }
-    .nav-links { display: flex; gap: 24px; list-style: none; }
-    .nav-links a {
-      font-size: 0.75rem;
-      font-weight: 500;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--grey);
-      transition: color 0.3s;
-    }
-    .nav-links a:hover { color: var(--cyan); }
-    @media (max-width: 600px) { .nav-links { display: none; } }
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:14px 5%;background:rgba(2,11,24,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);}
+    .nav-logo{font-family:"Orbitron",sans-serif;font-size:.82rem;font-weight:700;color:var(--cyan);letter-spacing:.15em;}
+    .nav-links{display:flex;gap:22px;list-style:none;}
+    .nav-links a{font-size:.72rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--grey);transition:color .3s;}
+    .nav-links a:hover{color:var(--cyan);}
+    @media(max-width:600px){.nav-links{display:none;}}
 
-    /* ============================
-       SECTIONS WRAPPER
-    ============================ */
-    main { position: relative; z-index: 1; }
-    section { padding: 90px 5% 60px; }
-    .section-label {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.65rem;
-      letter-spacing: 0.35em;
-      text-transform: uppercase;
-      color: var(--cyan);
-      margin-bottom: 10px;
-      opacity: 0.8;
-    }
-    .section-title {
-      font-family: 'Orbitron', sans-serif;
-      font-size: clamp(1.3rem, 3.5vw, 2rem);
-      font-weight: 700;
-      color: var(--white);
-      margin-bottom: 40px;
-      position: relative;
-      display: inline-block;
-    }
-    .section-title::after {
-      content: '';
-      position: absolute; bottom: -8px; left: 0;
-      width: 50px; height: 2px;
-      background: linear-gradient(90deg, var(--cyan), transparent);
-    }
+    main{position:relative;z-index:1;}
+    section{padding:90px 5% 60px;}
+    .section-label{font-family:"Orbitron",sans-serif;font-size:.63rem;letter-spacing:.35em;text-transform:uppercase;color:var(--cyan);margin-bottom:10px;opacity:.8;}
+    .section-title{font-family:"Orbitron",sans-serif;font-size:clamp(1.3rem,3.5vw,2rem);font-weight:700;color:var(--white);margin-bottom:40px;display:inline-block;position:relative;}
+    .section-title::after{content:"";position:absolute;bottom:-8px;left:0;width:50px;height:2px;background:linear-gradient(90deg,var(--cyan),transparent);}
 
-    /* ============================
-       HERO
-    ============================ */
-    #hero {
-      min-height: 100vh;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      text-align: center;
-      padding-top: 80px;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero-grid-overlay {
-      position: absolute; inset: 0;
-      background-image:
-        linear-gradient(rgba(0,229,255,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,229,255,0.04) 1px, transparent 1px);
-      background-size: 50px 50px;
-      pointer-events: none;
-    }
-    .hero-avatar-wrap {
-      position: relative;
-      width: 130px; height: 130px;
-      margin: 0 auto 28px;
-    }
-    .hero-avatar {
-      width: 130px; height: 130px;
-      border-radius: 50%;
-      object-fit: cover;
-      position: relative; z-index: 2;
-      border: 2px solid rgba(0,229,255,0.5);
-      background: linear-gradient(135deg, #0a1628, #0d2447);
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 2.4rem;
-      font-weight: 900;
-      color: var(--cyan);
-      text-shadow: var(--glow);
-    }
-    .avatar-ring {
-      position: absolute; inset: -8px;
-      border-radius: 50%;
-      border: 2px solid transparent;
-      background: linear-gradient(var(--bg), var(--bg)) padding-box,
-                  conic-gradient(var(--cyan), var(--blue-el), var(--cyan)) border-box;
-      animation: spinRing 4s linear infinite;
-    }
-    .avatar-ring2 {
-      position: absolute; inset: -16px;
-      border-radius: 50%;
-      border: 1px solid rgba(0,229,255,0.18);
-      animation: spinRing 8s linear infinite reverse;
-    }
-    @keyframes spinRing { to { transform: rotate(360deg); } }
+    #hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding-top:80px;position:relative;overflow:hidden;}
+    .hero-grid-overlay{position:absolute;inset:0;background-image:linear-gradient(rgba(0,229,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,.04) 1px,transparent 1px);background-size:50px 50px;pointer-events:none;}
 
-    .hero-name {
-      font-family: 'Orbitron', sans-serif;
-      font-size: clamp(1.8rem, 6vw, 3.8rem);
-      font-weight: 900;
-      color: var(--white);
-      letter-spacing: 0.06em;
-      line-height: 1.1;
-      text-shadow: 0 0 30px rgba(0,229,255,0.15);
-    }
-    .hero-name span { color: var(--cyan); }
-    .hero-title {
-      font-family: 'Exo 2', sans-serif;
-      font-size: clamp(0.85rem, 2.5vw, 1.15rem);
-      font-weight: 300;
-      color: var(--grey);
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      margin: 12px 0 8px;
-      min-height: 1.5em;
-    }
-    .typewriter-cursor {
-      display: inline-block;
-      width: 2px; height: 1em;
-      background: var(--cyan);
-      margin-left: 3px;
-      vertical-align: text-bottom;
-      animation: blink 1s step-end infinite;
-    }
-    @keyframes blink { 50% { opacity: 0 } }
+    .hero-logo-wrap{position:relative;width:170px;height:170px;margin:0 auto 28px;}
+    .avatar-ring{position:absolute;inset:-8px;border-radius:50%;border:2px solid transparent;background:linear-gradient(var(--bg),var(--bg)) padding-box,conic-gradient(var(--cyan),var(--blue-el),var(--cyan)) border-box;animation:spinRing 4s linear infinite;}
+    .avatar-ring2{position:absolute;inset:-16px;border-radius:50%;border:1px solid rgba(0,229,255,.18);animation:spinRing 8s linear infinite reverse;}
+    .avatar-circle{width:170px;height:170px;border-radius:50%;background:radial-gradient(circle at 40% 35%,#0d2a50,#020b18);border:2px solid rgba(0,229,255,.35);display:flex;align-items:center;justify-content:center;position:relative;z-index:2;overflow:hidden;}
+    .avatar-circle img{width:162px;height:auto;mix-blend-mode:screen;}
+    @keyframes spinRing{to{transform:rotate(360deg)}}
 
-    .hero-tagline {
-      font-size: clamp(0.8rem, 2vw, 0.95rem);
-      color: rgba(232,244,253,0.5);
-      margin-bottom: 32px;
-      max-width: 480px;
-    }
-    .hero-btns {
-      display: flex; gap: 14px; flex-wrap: wrap;
-      justify-content: center;
-    }
-    .btn-primary {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 12px 26px;
-      background: linear-gradient(135deg, var(--blue-el), var(--cyan-dim));
-      color: #fff;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      border: none; border-radius: 4px;
-      cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.3s;
-      box-shadow: 0 4px 20px rgba(41,121,255,0.35);
-    }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: var(--glow-lg); }
-    .btn-outline {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 12px 26px;
-      background: transparent;
-      color: var(--cyan);
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.7rem;
-      font-weight: 600;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      border: 1px solid var(--cyan);
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background 0.3s, transform 0.2s;
-    }
-    .btn-outline:hover { background: rgba(0,229,255,0.1); transform: translateY(-2px); }
+    .hero-name{font-family:"Orbitron",sans-serif;font-size:clamp(1.6rem,5.5vw,3.4rem);font-weight:900;color:var(--white);letter-spacing:.04em;line-height:1.1;}
+    .hero-name span{color:var(--cyan);}
+    .hero-title{font-family:"Exo 2",sans-serif;font-size:clamp(.82rem,2.5vw,1.1rem);font-weight:300;color:var(--grey);letter-spacing:.2em;text-transform:uppercase;margin:12px 0 8px;min-height:1.5em;}
+    .typewriter-cursor{display:inline-block;width:2px;height:1em;background:var(--cyan);margin-left:3px;vertical-align:text-bottom;animation:blink 1s step-end infinite;}
+    @keyframes blink{50%{opacity:0}}
+    .hero-tagline{font-size:clamp(.78rem,2vw,.93rem);color:rgba(232,244,253,.5);margin-bottom:32px;max-width:480px;}
+    .hero-btns{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;}
+    .btn-primary{display:inline-flex;align-items:center;gap:8px;padding:12px 26px;background:linear-gradient(135deg,var(--blue-el),var(--cyan-dim));color:#fff;font-family:"Orbitron",sans-serif;font-size:.7rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;border:none;border-radius:4px;cursor:pointer;transition:transform .2s,box-shadow .3s;box-shadow:0 4px 20px rgba(41,121,255,.35);}
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:var(--glow-lg);}
+    .btn-outline{display:inline-flex;align-items:center;gap:8px;padding:12px 26px;background:transparent;color:var(--cyan);font-family:"Orbitron",sans-serif;font-size:.7rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;border:1px solid var(--cyan);border-radius:4px;cursor:pointer;transition:background .3s,transform .2s;}
+    .btn-outline:hover{background:rgba(0,229,255,.1);transform:translateY(-2px);}
 
-    /* ============================
-       STATS BAR
-    ============================ */
-    .stats-bar {
-      display: flex; flex-wrap: wrap;
-      gap: 1px;
-      margin-top: 50px;
-      width: 100%; max-width: 700px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      overflow: hidden;
-      background: var(--border);
-    }
-    .stat-item {
-      flex: 1; min-width: 120px;
-      background: var(--card-bg);
-      padding: 18px 14px;
-      text-align: center;
-      backdrop-filter: blur(8px);
-    }
-    .stat-num {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 1.7rem;
-      font-weight: 700;
-      color: var(--cyan);
-      line-height: 1;
-    }
-    .stat-label {
-      font-size: 0.68rem;
-      color: var(--grey);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-top: 4px;
-    }
+    .stats-bar{display:flex;flex-wrap:wrap;gap:1px;margin-top:50px;width:100%;max-width:700px;border:1px solid var(--border);border-radius:6px;overflow:hidden;background:var(--border);}
+    .stat-item{flex:1;min-width:120px;background:var(--card-bg);padding:18px 14px;text-align:center;backdrop-filter:blur(8px);}
+    .stat-num{font-family:"Orbitron",sans-serif;font-size:1.7rem;font-weight:700;color:var(--cyan);line-height:1;}
+    .stat-label{font-size:.68rem;color:var(--grey);text-transform:uppercase;letter-spacing:.1em;margin-top:4px;}
 
-    /* ============================
-       PROFILE SUMMARY
-    ============================ */
-    #perfil {
-      background: linear-gradient(180deg, var(--bg) 0%, #030f24 100%);
-    }
-    .profile-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 30px;
-      align-items: start;
-    }
-    @media (max-width: 700px) { .profile-grid { grid-template-columns: 1fr; } }
-    .profile-text p {
-      font-size: 0.95rem;
-      line-height: 1.8;
-      color: rgba(232,244,253,0.75);
-      margin-bottom: 14px;
-    }
-    .profile-text strong { color: var(--cyan); }
-    .profile-chips {
-      display: flex; flex-wrap: wrap; gap: 8px;
-      margin-top: 14px;
-    }
-    .chip {
-      padding: 5px 13px;
-      font-size: 0.7rem;
-      font-weight: 500;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      color: var(--cyan);
-      background: rgba(0,229,255,0.05);
-      transition: background 0.2s;
-    }
-    .chip:hover { background: rgba(0,229,255,0.12); }
-    .profile-highlight {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 24px;
-      position: relative;
-      overflow: hidden;
-    }
-    .profile-highlight::before {
-      content: '';
-      position: absolute; top: 0; left: 0;
-      width: 3px; height: 100%;
-      background: linear-gradient(180deg, var(--cyan), var(--blue-el));
-    }
-    .highlight-item {
-      display: flex; align-items: flex-start; gap: 12px;
-      margin-bottom: 18px;
-    }
-    .highlight-item:last-child { margin-bottom: 0; }
-    .highlight-icon {
-      width: 36px; height: 36px; flex-shrink: 0;
-      border-radius: 8px;
-      background: linear-gradient(135deg, rgba(0,229,255,0.15), rgba(41,121,255,0.15));
-      border: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
-      color: var(--cyan);
-      font-size: 0.85rem;
-    }
-    .highlight-text strong {
-      display: block;
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: var(--white);
-      margin-bottom: 2px;
-    }
-    .highlight-text span { font-size: 0.75rem; color: var(--grey); }
+    #perfil{background:linear-gradient(180deg,var(--bg) 0%,#030f24 100%);}
+    .profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:30px;align-items:start;}
+    @media(max-width:700px){.profile-grid{grid-template-columns:1fr;}}
+    .profile-text p{font-size:.93rem;line-height:1.8;color:rgba(232,244,253,.75);margin-bottom:14px;}
+    .profile-text strong{color:var(--cyan);}
+    .profile-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;}
+    .chip{padding:5px 13px;font-size:.68rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--border);border-radius:20px;color:var(--cyan);background:rgba(0,229,255,.05);transition:background .2s;}
+    .chip:hover{background:rgba(0,229,255,.12);}
+    .profile-highlight{background:var(--card-bg);border:1px solid var(--border);border-radius:8px;padding:24px;position:relative;overflow:hidden;}
+    .profile-highlight::before{content:"";position:absolute;top:0;left:0;width:3px;height:100%;background:linear-gradient(180deg,var(--cyan),var(--blue-el));}
+    .highlight-item{display:flex;align-items:flex-start;gap:12px;margin-bottom:18px;}
+    .highlight-item:last-child{margin-bottom:0;}
+    .highlight-icon{width:36px;height:36px;flex-shrink:0;border-radius:8px;background:linear-gradient(135deg,rgba(0,229,255,.15),rgba(41,121,255,.15));border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--cyan);font-size:.85rem;}
+    .highlight-text strong{display:block;font-size:.82rem;font-weight:600;color:var(--white);margin-bottom:2px;}
+    .highlight-text span{font-size:.75rem;color:var(--grey);}
 
-    /* ============================
-       EXPERIENCE TIMELINE
-    ============================ */
-    #experiencia { background: var(--bg2); }
-    .timeline { position: relative; padding-left: 30px; }
-    .timeline::before {
-      content: '';
-      position: absolute; left: 10px; top: 0; bottom: 0;
-      width: 1px;
-      background: linear-gradient(180deg, var(--cyan), transparent);
-    }
-    .tl-item {
-      position: relative;
-      margin-bottom: 10px;
-    }
-    .tl-dot {
-      position: absolute; left: -26px; top: 20px;
-      width: 12px; height: 12px;
-      border-radius: 50%;
-      background: var(--bg2);
-      border: 2px solid var(--cyan);
-      box-shadow: 0 0 10px rgba(0,229,255,0.4);
-      transition: transform 0.2s;
-    }
-    .tl-item:hover .tl-dot { transform: scale(1.4); }
-    .tl-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 20px 22px;
-      cursor: pointer;
-      transition: border-color 0.3s, box-shadow 0.3s;
-      position: relative;
-      overflow: hidden;
-    }
-    .tl-card::after {
-      content: '';
-      position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(0,229,255,0.04), transparent);
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-    .tl-card:hover { border-color: var(--cyan); box-shadow: var(--glow); }
-    .tl-card:hover::after { opacity: 1; }
-    .tl-header {
-      display: flex; align-items: center; gap: 12px;
-      margin-bottom: 6px;
-    }
-    .tl-icon {
-      width: 38px; height: 38px; flex-shrink: 0;
-      border-radius: 8px;
-      background: linear-gradient(135deg, rgba(0,229,255,0.12), rgba(41,121,255,0.2));
-      border: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
-      color: var(--cyan); font-size: 1rem;
-    }
-    .tl-role {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: var(--white);
-      letter-spacing: 0.04em;
-    }
-    .tl-company { font-size: 0.72rem; color: var(--cyan); margin-top: 1px; }
-    .tl-period {
-      font-size: 0.68rem;
-      color: var(--grey);
-      margin-bottom: 10px;
-      font-family: 'Orbitron', sans-serif;
-      letter-spacing: 0.08em;
-    }
-    .tl-details {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.4s ease;
-    }
-    .tl-details.open { max-height: 300px; }
-    .tl-details ul {
-      list-style: none;
-      padding: 10px 0 0;
-      border-top: 1px solid var(--border);
-    }
-    .tl-details ul li {
-      font-size: 0.8rem;
-      color: rgba(232,244,253,0.7);
-      line-height: 1.6;
-      padding: 4px 0 4px 16px;
-      position: relative;
-    }
-    .tl-details ul li::before {
-      content: '▹';
-      position: absolute; left: 0;
-      color: var(--cyan);
-    }
-    .tl-toggle {
-      font-size: 0.68rem;
-      color: var(--cyan);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-top: 8px;
-      display: flex; align-items: center; gap: 4px;
-    }
+    #experiencia{background:var(--bg2);}
+    .timeline{position:relative;padding-left:30px;}
+    .timeline::before{content:"";position:absolute;left:10px;top:0;bottom:0;width:1px;background:linear-gradient(180deg,var(--cyan),transparent);}
+    .tl-item{position:relative;margin-bottom:10px;}
+    .tl-dot{position:absolute;left:-26px;top:20px;width:12px;height:12px;border-radius:50%;background:var(--bg2);border:2px solid var(--cyan);box-shadow:0 0 10px rgba(0,229,255,.4);transition:transform .2s;}
+    .tl-item:hover .tl-dot{transform:scale(1.4);}
+    .tl-card{background:var(--card-bg);border:1px solid var(--border);border-radius:8px;padding:20px 22px;cursor:pointer;transition:border-color .3s,box-shadow .3s;position:relative;overflow:hidden;}
+    .tl-card:hover{border-color:var(--cyan);box-shadow:var(--glow);}
+    .tl-header{display:flex;align-items:center;gap:12px;margin-bottom:6px;}
+    .tl-icon{width:38px;height:38px;flex-shrink:0;border-radius:8px;background:linear-gradient(135deg,rgba(0,229,255,.12),rgba(41,121,255,.2));border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--cyan);font-size:1rem;}
+    .tl-role{font-family:"Orbitron",sans-serif;font-size:.76rem;font-weight:600;color:var(--white);}
+    .tl-company{font-size:.72rem;color:var(--cyan);margin-top:1px;}
+    .tl-period{font-size:.67rem;color:var(--grey);margin-bottom:10px;font-family:"Orbitron",sans-serif;letter-spacing:.08em;}
+    .tl-toggle{font-size:.67rem;color:var(--cyan);letter-spacing:.1em;text-transform:uppercase;margin-top:8px;display:flex;align-items:center;gap:4px;}
+    .tl-details{max-height:0;overflow:hidden;transition:max-height .4s ease;}
+    .tl-details.open{max-height:300px;}
+    .tl-details ul{list-style:none;padding:10px 0 0;border-top:1px solid var(--border);}
+    .tl-details ul li{font-size:.78rem;color:rgba(232,244,253,.7);line-height:1.6;padding:4px 0 4px 16px;position:relative;}
+    .tl-details ul li::before{content:"▹";position:absolute;left:0;color:var(--cyan);}
 
-    /* ============================
-       SKILLS
-    ============================ */
-    #competencias { background: var(--bg); }
-    .skills-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 14px;
-    }
-    .skill-bar-wrap {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 16px 18px;
-      transition: border-color 0.3s;
-    }
-    .skill-bar-wrap:hover { border-color: rgba(0,229,255,0.4); }
-    .skill-top {
-      display: flex; justify-content: space-between;
-      align-items: center; margin-bottom: 10px;
-    }
-    .skill-name {
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: var(--white);
-      display: flex; align-items: center; gap: 8px;
-    }
-    .skill-name i { color: var(--cyan); font-size: 0.8rem; }
-    .skill-pct {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.7rem;
-      color: var(--cyan);
-    }
-    .skill-track {
-      height: 4px;
-      background: rgba(255,255,255,0.06);
-      border-radius: 4px;
-      overflow: hidden;
-    }
-    .skill-fill {
-      height: 100%;
-      border-radius: 4px;
-      background: linear-gradient(90deg, var(--blue-el), var(--cyan));
-      width: 0;
-      transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: 0 0 8px var(--cyan);
-    }
+    #competencias{background:var(--bg);}
+    .skills-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;}
+    .skill-bar-wrap{background:var(--card-bg);border:1px solid var(--border);border-radius:8px;padding:16px 18px;transition:border-color .3s;}
+    .skill-bar-wrap:hover{border-color:rgba(0,229,255,.4);}
+    .skill-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+    .skill-name{font-size:.77rem;font-weight:600;color:var(--white);display:flex;align-items:center;gap:8px;}
+    .skill-name i{color:var(--cyan);font-size:.8rem;}
+    .skill-pct{font-family:"Orbitron",sans-serif;font-size:.7rem;color:var(--cyan);}
+    .skill-track{height:4px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;}
+    .skill-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--blue-el),var(--cyan));width:0;transition:width 1.2s cubic-bezier(.16,1,.3,1);box-shadow:0 0 8px var(--cyan);}
 
-    /* ============================
-       LOGROS
-    ============================ */
-    #logros { background: var(--bg2); }
-    .logros-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 18px;
-    }
-    .logro-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 24px 22px;
-      position: relative;
-      overflow: hidden;
-      transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
-    }
-    .logro-card::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-    .logro-card:hover { transform: translateY(-5px); box-shadow: var(--glow-lg); border-color: rgba(0,229,255,0.35); }
-    .logro-card:hover::before { opacity: 1; }
-    .logro-icon {
-      width: 44px; height: 44px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, rgba(0,229,255,0.12), rgba(41,121,255,0.2));
-      border: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
-      color: var(--cyan); font-size: 1.1rem;
-      margin-bottom: 16px;
-    }
-    .logro-title {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: var(--white);
-      margin-bottom: 8px;
-      line-height: 1.4;
-    }
-    .logro-desc { font-size: 0.78rem; color: var(--grey); line-height: 1.6; }
-    .logro-badge {
-      display: inline-block;
-      margin-top: 12px;
-      padding: 3px 10px;
-      border-radius: 12px;
-      background: rgba(0,229,255,0.08);
-      border: 1px solid rgba(0,229,255,0.2);
-      font-size: 0.65rem;
-      color: var(--cyan);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
+    #logros{background:var(--bg2);}
+    .logros-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;}
+    .logro-card{background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:24px 22px;position:relative;overflow:hidden;transition:transform .3s,box-shadow .3s,border-color .3s;}
+    .logro-card::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:0;transition:opacity .3s;}
+    .logro-card:hover{transform:translateY(-5px);box-shadow:var(--glow-lg);border-color:rgba(0,229,255,.35);}
+    .logro-card:hover::before{opacity:1;}
+    .logro-icon{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,rgba(0,229,255,.12),rgba(41,121,255,.2));border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--cyan);font-size:1.1rem;margin-bottom:16px;}
+    .logro-title{font-family:"Orbitron",sans-serif;font-size:.77rem;font-weight:600;color:var(--white);margin-bottom:8px;line-height:1.4;}
+    .logro-desc{font-size:.77rem;color:var(--grey);line-height:1.6;}
+    .logro-badge{display:inline-block;margin-top:12px;padding:3px 10px;border-radius:12px;background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.2);font-size:.64rem;color:var(--cyan);letter-spacing:.08em;text-transform:uppercase;}
 
-    /* ============================
-       IMAGEN GALLERY
-    ============================ */
-    #galeria { background: var(--bg); padding-bottom: 60px; }
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: 220px 220px;
-      gap: 10px;
-    }
-    @media (max-width: 700px) {
-      .gallery-grid {
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: 160px 160px 160px;
-      }
-      .gallery-item:nth-child(5) { display: none; }
-    }
-    .gallery-item {
-      position: relative;
-      border-radius: 8px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-      cursor: pointer;
-    }
-    .gallery-item:nth-child(1) { grid-row: span 2; }
-    .gallery-item img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform 0.5s ease;
-      filter: brightness(0.55) saturate(0.7);
-    }
-    .gallery-item:hover img { transform: scale(1.06); filter: brightness(0.45) saturate(0.9); }
-    .gallery-overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(0deg, rgba(0,0,0,0.75) 0%, transparent 60%);
-      display: flex; flex-direction: column;
-      justify-content: flex-end;
-      padding: 18px;
-      transition: background 0.3s;
-    }
-    .gallery-item:hover .gallery-overlay {
-      background: linear-gradient(0deg, rgba(0,40,80,0.8) 0%, rgba(0,229,255,0.05) 100%);
-    }
-    .gallery-tag {
-      font-size: 0.62rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--cyan);
-      margin-bottom: 4px;
-    }
-    .gallery-caption {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 0.72rem;
-      font-weight: 600;
-      color: var(--white);
-      line-height: 1.3;
-    }
+    #galeria{background:var(--bg);}
+    .gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:220px 220px;gap:10px;}
+    @media(max-width:700px){.gallery-grid{grid-template-columns:1fr 1fr;grid-template-rows:160px 160px 160px;}.gallery-item:nth-child(5){display:none;}}
+    .gallery-item{position:relative;border-radius:8px;overflow:hidden;border:1px solid var(--border);cursor:pointer;}
+    .gallery-item:nth-child(1){grid-row:span 2;}
+    .gallery-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease;filter:brightness(.55) saturate(.7);}
+    .gallery-item:hover img{transform:scale(1.06);filter:brightness(.45) saturate(.9);}
+    .gallery-overlay{position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.75) 0%,transparent 60%);display:flex;flex-direction:column;justify-content:flex-end;padding:18px;}
+    .gallery-tag{font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan);margin-bottom:4px;}
+    .gallery-caption{font-family:"Orbitron",sans-serif;font-size:.72rem;font-weight:600;color:var(--white);line-height:1.3;}
 
-    /* ============================
-       FOOTER
-    ============================ */
-    footer {
-      background: #010810;
-      border-top: 1px solid var(--border);
-      padding: 40px 5% 30px;
-      text-align: center;
-      position: relative; z-index: 1;
-    }
-    .footer-name {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--cyan);
-      letter-spacing: 0.15em;
-      margin-bottom: 6px;
-    }
-    .footer-sub {
-      font-size: 0.73rem;
-      color: var(--grey);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      margin-bottom: 20px;
-    }
-    .footer-links {
-      display: flex; gap: 18px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-bottom: 20px;
-    }
-    .footer-link {
-      display: flex; align-items: center; gap: 7px;
-      font-size: 0.78rem;
-      color: var(--grey);
-      transition: color 0.2s;
-    }
-    .footer-link:hover { color: var(--cyan); }
-    .footer-link i { color: var(--cyan); }
-    .footer-copy {
-      font-size: 0.65rem;
-      color: rgba(74,111,165,0.5);
-      letter-spacing: 0.1em;
-    }
+    footer{background:#010810;border-top:1px solid var(--border);padding:40px 5% 30px;text-align:center;position:relative;z-index:1;}
+    .footer-name{font-family:"Orbitron",sans-serif;font-size:1rem;font-weight:700;color:var(--cyan);letter-spacing:.15em;margin-bottom:6px;}
+    .footer-sub{font-size:.72rem;color:var(--grey);letter-spacing:.12em;text-transform:uppercase;margin-bottom:20px;}
+    .footer-links{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;}
+    .footer-link{display:flex;align-items:center;gap:7px;font-size:.77rem;color:var(--grey);transition:color .2s;}
+    .footer-link:hover{color:var(--cyan);}
+    .footer-link i{color:var(--cyan);}
+    .footer-copy{font-size:.64rem;color:rgba(74,111,165,.5);letter-spacing:.1em;}
 
-    /* ============================
-       FAB CONTACT BUTTON
-    ============================ */
-    .fab-wrap {
-      position: fixed;
-      bottom: 28px; right: 22px;
-      z-index: 500;
-      display: flex; flex-direction: column;
-      align-items: flex-end;
-      gap: 10px;
-    }
-    .fab-menu {
-      display: flex; flex-direction: column; gap: 10px;
-      opacity: 0; pointer-events: none;
-      transform: translateY(10px);
-      transition: opacity 0.3s, transform 0.3s;
-    }
-    .fab-menu.open { opacity: 1; pointer-events: all; transform: translateY(0); }
-    .fab-option {
-      display: flex; align-items: center; gap: 10px;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 9px 16px 9px 12px;
-      color: var(--white);
-      font-size: 0.78rem;
-      font-weight: 500;
-      backdrop-filter: blur(12px);
-      cursor: pointer;
-      transition: border-color 0.2s, background 0.2s;
-      white-space: nowrap;
-    }
-    .fab-option:hover { border-color: var(--cyan); background: rgba(0,229,255,0.08); }
-    .fab-option i { color: var(--cyan); width: 16px; text-align: center; }
-    .fab-btn {
-      width: 52px; height: 52px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--blue-el), var(--cyan-dim));
-      border: none;
-      color: #fff; font-size: 1.1rem;
-      cursor: pointer;
-      box-shadow: 0 4px 20px rgba(41,121,255,0.5);
-      transition: transform 0.3s, box-shadow 0.3s;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .fab-btn:hover { transform: scale(1.1); box-shadow: var(--glow-lg); }
-    .fab-btn.active { transform: rotate(45deg); }
+    .fab-wrap{position:fixed;bottom:28px;right:22px;z-index:500;display:flex;flex-direction:column;align-items:flex-end;gap:10px;}
+    .fab-menu{display:flex;flex-direction:column;gap:10px;opacity:0;pointer-events:none;transform:translateY(10px);transition:opacity .3s,transform .3s;}
+    .fab-menu.open{opacity:1;pointer-events:all;transform:translateY(0);}
+    .fab-option{display:flex;align-items:center;gap:10px;background:var(--card-bg);border:1px solid var(--border);border-radius:24px;padding:9px 16px 9px 12px;color:var(--white);font-size:.77rem;font-weight:500;backdrop-filter:blur(12px);cursor:pointer;transition:border-color .2s,background .2s;white-space:nowrap;}
+    .fab-option:hover{border-color:var(--cyan);background:rgba(0,229,255,.08);}
+    .fab-option i{color:var(--cyan);width:16px;text-align:center;}
+    .fab-btn{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--blue-el),var(--cyan-dim));border:none;color:#fff;font-size:1.1rem;cursor:pointer;box-shadow:0 4px 20px rgba(41,121,255,.5);transition:transform .3s,box-shadow .3s;display:flex;align-items:center;justify-content:center;}
+    .fab-btn:hover{transform:scale(1.1);box-shadow:var(--glow-lg);}
+    .fab-btn.active{transform:rotate(45deg);}
 
-    /* ============================
-       SCROLL ANIMATIONS
-    ============================ */
-    .reveal {
-      opacity: 0;
-      transform: translateY(28px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
-    }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-    .reveal-delay-1 { transition-delay: 0.1s; }
-    .reveal-delay-2 { transition-delay: 0.2s; }
-    .reveal-delay-3 { transition-delay: 0.3s; }
-
-    /* ============================
-       SCANNING LINE EFFECT
-    ============================ */
-    .scan-line {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
-      opacity: 0.08;
-      pointer-events: none;
-      z-index: 9998;
-      animation: scanDown 8s linear infinite;
-    }
-    @keyframes scanDown {
-      from { top: 0 }
-      to   { top: 100vh }
-    }
+    .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease;}
+    .reveal.visible{opacity:1;transform:translateY(0);}
+    .reveal-delay-1{transition-delay:.1s;}
+    .reveal-delay-2{transition-delay:.2s;}
+    .reveal-delay-3{transition-delay:.3s;}
   </style>
 </head>
 <body>
-
-<!-- Scan line decorativo -->
 <div class="scan-line"></div>
 
-<!-- ========================
-     SPLASH SCREEN
-======================== -->
 <div id="splash">
-  <div class="splash-name">BENJAMÍN MERLET</div>
+  <div class="splash-name">BENJAMÍN MERLET ARRIETA</div>
   <div class="splash-sub">Inicializando perfil</div>
   <div class="splash-bar-wrap"><div class="splash-bar"></div></div>
 </div>
 
-<!-- Canvas partículas -->
 <canvas id="particles"></canvas>
 
-<!-- ========================
-     NAVBAR
-======================== -->
 <nav>
-  <div class="nav-logo">BM · Portfolio</div>
+  <div class="nav-logo">BMA · Portfolio</div>
   <ul class="nav-links">
     <li><a href="#perfil">Perfil</a></li>
     <li><a href="#experiencia">Experiencia</a></li>
@@ -817,573 +193,143 @@
   </ul>
 </nav>
 
-<!-- ========================
-     MAIN CONTENT
-======================== -->
 <main>
-
-  <!-- HERO -->
   <section id="hero">
     <div class="hero-grid-overlay"></div>
-
-    <div class="hero-avatar-wrap">
+    <div class="hero-logo-wrap">
       <div class="avatar-ring2"></div>
       <div class="avatar-ring"></div>
-      <div class="hero-avatar">BM</div>
+      <div class="avatar-circle">
+        <img src="data:image/jpeg;base64,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" alt="BMA Logo" style="width:168px;height:auto;mix-blend-mode:screen;" />
+      </div>
     </div>
-
-    <h1 class="hero-name">
-      Benjamín <span>Merlet</span>
-    </h1>
-    <p class="hero-title">
-      <span id="typewriter"></span><span class="typewriter-cursor"></span>
-    </p>
-    <p class="hero-tagline">
-      +6 años optimizando operaciones logísticas, flotas y cadenas de suministro en Chile
-    </p>
-
+    <h1 class="hero-name">Benjamín <span>Merlet Arrieta</span></h1>
+    <p class="hero-title"><span id="typewriter"></span><span class="typewriter-cursor"></span></p>
+    <p class="hero-tagline">+6 años optimizando operaciones logísticas, flotas y cadenas de suministro en Chile</p>
     <div class="hero-btns">
-      <a href="https://wa.me/56982511566" class="btn-primary" target="_blank">
-        <i class="fab fa-whatsapp"></i> Contactar
-      </a>
-      <a href="mailto:benjamerlet@gmail.com" class="btn-outline">
-        <i class="fas fa-envelope"></i> Email
-      </a>
+      <a href="https://wa.me/56982511566" class="btn-primary" target="_blank"><i class="fab fa-whatsapp"></i> Contactar</a>
+      <a href="mailto:benjamerlet@gmail.com" class="btn-outline"><i class="fas fa-envelope"></i> Email</a>
     </div>
-
     <div class="stats-bar">
-      <div class="stat-item">
-        <div class="stat-num">6+</div>
-        <div class="stat-label">Años exp.</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-num">3</div>
-        <div class="stat-label">Empresas</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-num">WMS</div>
-        <div class="stat-label">Key User</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-num">ISO</div>
-        <div class="stat-label">9001:2015</div>
-      </div>
+      <div class="stat-item"><div class="stat-num">6+</div><div class="stat-label">Años exp.</div></div>
+      <div class="stat-item"><div class="stat-num">3</div><div class="stat-label">Empresas</div></div>
+      <div class="stat-item"><div class="stat-num">WMS</div><div class="stat-label">Key User</div></div>
+      <div class="stat-item"><div class="stat-num">ISO</div><div class="stat-label">9001:2015</div></div>
     </div>
   </section>
 
-  <!-- PERFIL -->
   <section id="perfil">
     <div class="section-label reveal">// 01 — Perfil</div>
     <h2 class="section-title reveal">Acerca de mí</h2>
     <div class="profile-grid">
       <div class="profile-text reveal">
-        <p>
-          Ingeniero Comercial titulado con sólida trayectoria liderando operaciones en
-          <strong>logística, transporte de carga y mantenimiento de flota</strong>.
-          Combino gestión de equipos multidisciplinarios, control de inventarios y análisis
-          de datos con un enfoque permanente en la mejora continua.
-        </p>
-        <p>
-          Especialista en implementación de sistemas <strong>WMS e HIVETIRE</strong>,
-          control de KPI y planificación de mantenimiento preventivo.
-          Incorporo activamente <strong>inteligencia artificial</strong> para automatizar
-          tareas y acelerar la toma de decisiones operativas.
-        </p>
+        <p>Ingeniero Comercial titulado con sólida trayectoria liderando operaciones en <strong>logística, transporte de carga y mantenimiento de flota</strong>. Combino gestión de equipos multidisciplinarios, control de inventarios y análisis de datos con un enfoque permanente en la mejora continua.</p>
+        <p>Especialista en implementación de sistemas <strong>WMS e HIVETIRE</strong>, control de KPI y planificación de mantenimiento preventivo. Incorporo activamente <strong>inteligencia artificial</strong> para automatizar tareas y acelerar la toma de decisiones operativas.</p>
         <div class="profile-chips">
-          <span class="chip">WMS Key User</span>
-          <span class="chip">HIVETIRE</span>
-          <span class="chip">ISO 9001</span>
-          <span class="chip">KPI</span>
-          <span class="chip">Power BI</span>
-          <span class="chip">IA Operativa</span>
+          <span class="chip">WMS Key User</span><span class="chip">HIVETIRE</span><span class="chip">ISO 9001</span><span class="chip">KPI</span><span class="chip">Power BI</span><span class="chip">IA Operativa</span>
         </div>
       </div>
       <div class="profile-highlight reveal reveal-delay-1">
-        <div class="highlight-item">
-          <div class="highlight-icon"><i class="fas fa-boxes-stacked"></i></div>
-          <div class="highlight-text">
-            <strong>Gestión de Inventarios</strong>
-            <span>Control, trazabilidad y conteos cíclicos en CD</span>
-          </div>
-        </div>
-        <div class="highlight-item">
-          <div class="highlight-icon"><i class="fas fa-truck"></i></div>
-          <div class="highlight-text">
-            <strong>Flota y Mantenimiento</strong>
-            <span>Planificación preventiva y gestión de neumáticos</span>
-          </div>
-        </div>
-        <div class="highlight-item">
-          <div class="highlight-icon"><i class="fas fa-robot"></i></div>
-          <div class="highlight-text">
-            <strong>Automatización con IA</strong>
-            <span>Reportes automáticos y optimización de procesos</span>
-          </div>
-        </div>
-        <div class="highlight-item">
-          <div class="highlight-icon"><i class="fas fa-chart-line"></i></div>
-          <div class="highlight-text">
-            <strong>Análisis & KPI</strong>
-            <span>Indicadores operativos, Power BI y Excel avanzado</span>
-          </div>
-        </div>
+        <div class="highlight-item"><div class="highlight-icon"><i class="fas fa-boxes-stacked"></i></div><div class="highlight-text"><strong>Gestión de Inventarios</strong><span>Control, trazabilidad y conteos cíclicos en CD</span></div></div>
+        <div class="highlight-item"><div class="highlight-icon"><i class="fas fa-truck"></i></div><div class="highlight-text"><strong>Flota y Mantenimiento</strong><span>Planificación preventiva y gestión de neumáticos</span></div></div>
+        <div class="highlight-item"><div class="highlight-icon"><i class="fas fa-robot"></i></div><div class="highlight-text"><strong>Automatización con IA</strong><span>Reportes automáticos y optimización de procesos</span></div></div>
+        <div class="highlight-item"><div class="highlight-icon"><i class="fas fa-chart-line"></i></div><div class="highlight-text"><strong>Análisis &amp; KPI</strong><span>Indicadores operativos, Power BI y Excel avanzado</span></div></div>
       </div>
     </div>
   </section>
 
-  <!-- EXPERIENCIA -->
   <section id="experiencia">
     <div class="section-label reveal">// 02 — Experiencia</div>
     <h2 class="section-title reveal">Trayectoria Profesional</h2>
-    <p style="font-size:0.78rem; color:var(--grey); margin-bottom:28px;" class="reveal">
-      Haz clic en cada cargo para ver los logros clave
-    </p>
+    <p style="font-size:.77rem;color:var(--grey);margin-bottom:28px;" class="reveal">Toca cada cargo para ver los logros clave</p>
     <div class="timeline">
-
-      <div class="tl-item reveal">
-        <div class="tl-dot"></div>
-        <div class="tl-card" onclick="toggleTL(this)">
-          <div class="tl-header">
-            <div class="tl-icon"><i class="fas fa-tire"></i></div>
-            <div>
-              <div class="tl-role">Supervisor Área Técnica</div>
-              <div class="tl-company">Trailer Logistics</div>
-            </div>
-          </div>
-          <div class="tl-period">ENE 2026 — ABR 2026</div>
-          <div class="tl-toggle"><i class="fas fa-chevron-down"></i> Ver logros</div>
-          <div class="tl-details">
-            <ul>
-              <li>Lideré personal de vulcanización y lavado de equipos asegurando calidad y seguridad.</li>
-              <li>Administré HIVETIRE garantizando trazabilidad completa de neumáticos.</li>
-              <li>Analicé causas raíz de desgaste prematuro generando planes para extender vida útil.</li>
-              <li>Gestioné órdenes de compra, proveedores y seguimiento de estados de pago.</li>
-              <li>Planifiqué mantenimientos preventivos y asigné labores a mecánicos.</li>
-              <li>Preparé equipos para revisión técnica asegurando continuidad operacional.</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <div class="tl-item reveal reveal-delay-1">
-        <div class="tl-dot"></div>
-        <div class="tl-card" onclick="toggleTL(this)">
-          <div class="tl-header">
-            <div class="tl-icon"><i class="fas fa-warehouse"></i></div>
-            <div>
-              <div class="tl-role">Supervisor de Inventario y WMS</div>
-              <div class="tl-company">Trailer Logistics</div>
-            </div>
-          </div>
-          <div class="tl-period">ABR 2025 — DIC 2025</div>
-          <div class="tl-toggle"><i class="fas fa-chevron-down"></i> Ver logros</div>
-          <div class="tl-details">
-            <ul>
-              <li>Controlé inventarios en centros de distribución con alta precisión y trazabilidad vía WMS.</li>
-              <li>Supervisé recepción, almacenaje, picking, despachos y ajustes de inventario.</li>
-              <li>Elaboré reportes de gestión e indicadores de productividad (KPI).</li>
-              <li>Capacité al personal en WMS resolviendo incidencias en tiempo real.</li>
-              <li>Optimicé layout de bodega mejorando rotación de pallets y reduciendo errores de ubicación.</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <div class="tl-item reveal reveal-delay-2">
-        <div class="tl-dot"></div>
-        <div class="tl-card" onclick="toggleTL(this)">
-          <div class="tl-header">
-            <div class="tl-icon"><i class="fas fa-gears"></i></div>
-            <div>
-              <div class="tl-role">Ingeniero de Procesos</div>
-              <div class="tl-company">Trailer Logistics</div>
-            </div>
-          </div>
-          <div class="tl-period">AGO 2023 — MAR 2025</div>
-          <div class="tl-toggle"><i class="fas fa-chevron-down"></i> Ver logros</div>
-          <div class="tl-details">
-            <ul>
-              <li>Key User del sistema WMS liderando su gestión integral y soporte funcional.</li>
-              <li>Lideré proyecto Santiago 2023 (Juegos Panamericanos) como encargado de cuenta.</li>
-              <li>Calculé y analicé indicadores de productividad de colaboradores y ocupación de layout.</li>
-              <li>Realicé proyección y análisis financiero asociado a la operación.</li>
-              <li>Optimicé procesos en transporte y almacenaje generando ahorros operativos.</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      <div class="tl-item reveal reveal-delay-3">
-        <div class="tl-dot"></div>
-        <div class="tl-card" onclick="toggleTL(this)">
-          <div class="tl-header">
-            <div class="tl-icon"><i class="fas fa-seedling"></i></div>
-            <div>
-              <div class="tl-role">Jefe de Operaciones Agrícolas</div>
-              <div class="tl-company">Arándanos Cuatro Vientos</div>
-            </div>
-          </div>
-          <div class="tl-period">ENE 2020 — MAY 2023</div>
-          <div class="tl-toggle"><i class="fas fa-chevron-down"></i> Ver logros</div>
-          <div class="tl-details">
-            <ul>
-              <li>Planifiqué y coordiné cosecha gestionando cuadrillas y recursos en terreno.</li>
-              <li>Supervisé personal y controlé productividad bajo estándares de calidad y seguridad.</li>
-              <li>Implementé buenas prácticas agrícolas y optimicé procesos operacionales.</li>
-              <li>Generé reportes operativos y analicé indicadores de rendimiento.</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
+      <div class="tl-item reveal"><div class="tl-dot"></div><div class="tl-card" onclick="toggleTL(this)"><div class="tl-header"><div class="tl-icon"><i class="fas fa-tire"></i></div><div><div class="tl-role">Supervisor Área Técnica</div><div class="tl-company">Trailer Logistics</div></div></div><div class="tl-period">ENE 2026 — ABR 2026</div><div class="tl-toggle"><i class="fas fa-chevron-down"></i> Ver logros</div><div class="tl-details"><ul><li>Lideré personal de vulcanización y lavado asegurando calidad y seguridad.</li><li>Administré HIVETIRE garantizando trazabilidad completa de neumáticos.</li><li>Analicé causas raíz de desgaste prematuro generando planes de acción.</li><li>Gestioné órdenes de compra, proveedores y seguimiento de estados de pago.</li><li>Planifiqué mantenimientos preventivos y asigné labores a mecánicos.</li></ul></div></div></div>
+      <div class="tl-item reveal reveal-delay-1"><div class="tl-dot"></div><div class="tl-card" onclick="toggleTL(this)"><div class="tl-header"><div class="tl-icon"><i class="fas fa-warehouse"></i></div><div><div class="tl-role">Supervisor de Inventario y WMS</div><div class="tl-company">Trailer Logistics</div></div></div><div class="tl-period">ABR 2025 — DIC 2025</div><div class="tl-toggle"><i class="fas fa-chevron-down"></i> Ver logros</div><div class="tl-details"><ul><li>Controlé inventarios en centros de distribución con alta precisión vía WMS.</li><li>Supervisé recepción, almacenaje, picking, despachos y ajustes.</li><li>Elaboré reportes de gestión e indicadores de productividad KPI.</li><li>Capacité al personal en WMS resolviendo incidencias en tiempo real.</li><li>Optimicé layout de bodega mejorando rotación de pallets.</li></ul></div></div></div>
+      <div class="tl-item reveal reveal-delay-2"><div class="tl-dot"></div><div class="tl-card" onclick="toggleTL(this)"><div class="tl-header"><div class="tl-icon"><i class="fas fa-gears"></i></div><div><div class="tl-role">Ingeniero de Procesos</div><div class="tl-company">Trailer Logistics</div></div></div><div class="tl-period">AGO 2023 — MAR 2025</div><div class="tl-toggle"><i class="fas fa-chevron-down"></i> Ver logros</div><div class="tl-details"><ul><li>Key User del sistema WMS liderando su gestión integral y soporte funcional.</li><li>Lideré proyecto Santiago 2023 Juegos Panamericanos como encargado de cuenta.</li><li>Calculé y analicé indicadores de productividad y ocupación de layout.</li><li>Realicé proyección y análisis financiero asociado a la operación.</li></ul></div></div></div>
+      <div class="tl-item reveal reveal-delay-3"><div class="tl-dot"></div><div class="tl-card" onclick="toggleTL(this)"><div class="tl-header"><div class="tl-icon"><i class="fas fa-seedling"></i></div><div><div class="tl-role">Jefe de Operaciones Agrícolas</div><div class="tl-company">Arándanos Cuatro Vientos</div></div></div><div class="tl-period">ENE 2020 — MAY 2023</div><div class="tl-toggle"><i class="fas fa-chevron-down"></i> Ver logros</div><div class="tl-details"><ul><li>Planifiqué y coordiné cosecha gestionando cuadrillas y recursos en terreno.</li><li>Supervisé personal y controlé productividad bajo estándares de calidad.</li><li>Implementé buenas prácticas agrícolas y optimicé procesos operacionales.</li><li>Generé reportes operativos y analicé indicadores de rendimiento.</li></ul></div></div></div>
     </div>
   </section>
 
-  <!-- COMPETENCIAS -->
   <section id="competencias">
     <div class="section-label reveal">// 03 — Skills</div>
     <h2 class="section-title reveal">Competencias Técnicas</h2>
-    <div class="skills-grid" id="skillsGrid">
-      <!-- Generadas por JS -->
-    </div>
+    <div class="skills-grid" id="skillsGrid"></div>
   </section>
 
-  <!-- LOGROS -->
   <section id="logros">
     <div class="section-label reveal">// 04 — Logros</div>
     <h2 class="section-title reveal">Hitos Destacados</h2>
     <div class="logros-grid">
-      <div class="logro-card reveal">
-        <div class="logro-icon"><i class="fas fa-medal"></i></div>
-        <div class="logro-title">Juegos Panamericanos Santiago 2023</div>
-        <div class="logro-desc">Encargado de cuenta del proyecto, coordinando operaciones logísticas críticas en uno de los eventos deportivos más importantes del país.</div>
-        <span class="logro-badge">Alta Complejidad</span>
-      </div>
-      <div class="logro-card reveal reveal-delay-1">
-        <div class="logro-icon"><i class="fas fa-circle-nodes"></i></div>
-        <div class="logro-title">Implementación y Administración HIVETIRE</div>
-        <div class="logro-desc">Key Operator del sistema de gestión de neumáticos, logrando trazabilidad total y reducción de errores operativos en la flota.</div>
-        <span class="logro-badge">Gestión de Flota</span>
-      </div>
-      <div class="logro-card reveal reveal-delay-2">
-        <div class="logro-icon"><i class="fas fa-layout"></i></div>
-        <div class="logro-title">Optimización de Layout de Bodega</div>
-        <div class="logro-desc">Rediseño del layout de centros de distribución mejorando la rotación de pallets, reduciendo errores de ubicación y aumentando productividad.</div>
-        <span class="logro-badge">WMS</span>
-      </div>
-      <div class="logro-card reveal reveal-delay-3">
-        <div class="logro-icon"><i class="fas fa-robot"></i></div>
-        <div class="logro-title">Reducción de Costos con IA</div>
-        <div class="logro-desc">Automatización de reportes y análisis de datos operativos con herramientas de inteligencia artificial, acelerando decisiones y reduciendo tiempos de proceso.</div>
-        <span class="logro-badge">Innovación</span>
-      </div>
-      <div class="logro-card reveal">
-        <div class="logro-icon"><i class="fas fa-certificate"></i></div>
-        <div class="logro-title">Certificación ISO 9001:2015</div>
-        <div class="logro-desc">Certificado por AENOR en interpretación e implementación de Sistemas de Gestión de la Calidad, aplicado a procesos logísticos y operativos.</div>
-        <span class="logro-badge">Calidad</span>
-      </div>
-      <div class="logro-card reveal reveal-delay-1">
-        <div class="logro-icon"><i class="fas fa-database"></i></div>
-        <div class="logro-title">Key User WMS</div>
-        <div class="logro-desc">Gestión integral, soporte funcional y capacitación de usuarios en sistema WMS para centros de distribución de alto flujo operacional.</div>
-        <span class="logro-badge">Tecnología</span>
-      </div>
+      <div class="logro-card reveal"><div class="logro-icon"><i class="fas fa-medal"></i></div><div class="logro-title">Juegos Panamericanos Santiago 2023</div><div class="logro-desc">Encargado de cuenta del proyecto, coordinando operaciones logísticas críticas en uno de los eventos deportivos más importantes del país.</div><span class="logro-badge">Alta Complejidad</span></div>
+      <div class="logro-card reveal reveal-delay-1"><div class="logro-icon"><i class="fas fa-circle-nodes"></i></div><div class="logro-title">Implementación HIVETIRE</div><div class="logro-desc">Key Operator del sistema de gestión de neumáticos, logrando trazabilidad total y reducción de errores operativos en la flota.</div><span class="logro-badge">Gestión de Flota</span></div>
+      <div class="logro-card reveal reveal-delay-2"><div class="logro-icon"><i class="fas fa-warehouse"></i></div><div class="logro-title">Optimización Layout de Bodega</div><div class="logro-desc">Rediseño del layout de centros de distribución mejorando la rotación de pallets y reduciendo errores de ubicación.</div><span class="logro-badge">WMS</span></div>
+      <div class="logro-card reveal reveal-delay-3"><div class="logro-icon"><i class="fas fa-robot"></i></div><div class="logro-title">Reducción de Costos con IA</div><div class="logro-desc">Automatización de reportes y análisis de datos con inteligencia artificial, acelerando decisiones y reduciendo tiempos de proceso.</div><span class="logro-badge">Innovación</span></div>
+      <div class="logro-card reveal"><div class="logro-icon"><i class="fas fa-certificate"></i></div><div class="logro-title">Certificación ISO 9001:2015</div><div class="logro-desc">Certificado por AENOR en interpretación e implementación de Sistemas de Gestión de la Calidad aplicado a procesos logísticos.</div><span class="logro-badge">Calidad</span></div>
+      <div class="logro-card reveal reveal-delay-1"><div class="logro-icon"><i class="fas fa-database"></i></div><div class="logro-title">Key User WMS</div><div class="logro-desc">Gestión integral, soporte funcional y capacitación en sistema WMS para centros de distribución de alto flujo operacional.</div><span class="logro-badge">Tecnología</span></div>
     </div>
   </section>
 
-  <!-- GALERÍA -->
   <section id="galeria">
     <div class="section-label reveal">// 05 — Ámbito</div>
     <h2 class="section-title reveal">Entorno Operacional</h2>
     <div class="gallery-grid reveal">
-      <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&q=80" alt="Centro de distribución" loading="lazy" />
-        <div class="gallery-overlay">
-          <div class="gallery-tag">Almacenaje</div>
-          <div class="gallery-caption">Centros de Distribución</div>
-        </div>
-      </div>
-      <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=800&q=80" alt="Flota de camiones" loading="lazy" />
-        <div class="gallery-overlay">
-          <div class="gallery-tag">Flota</div>
-          <div class="gallery-caption">Gestión de Flota y Transporte</div>
-        </div>
-      </div>
-      <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1553413077-190dd305871c?w=800&q=80" alt="Control logístico" loading="lazy" />
-        <div class="gallery-overlay">
-          <div class="gallery-tag">Tecnología</div>
-          <div class="gallery-caption">Control y Analítica Operacional</div>
-        </div>
-      </div>
-      <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1519003722824-194d4455a60c?w=800&q=80" alt="Bodega" loading="lazy" />
-        <div class="gallery-overlay">
-          <div class="gallery-tag">WMS</div>
-          <div class="gallery-caption">Operaciones de Bodega</div>
-        </div>
-      </div>
-      <div class="gallery-item">
-        <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&q=80" alt="KPI Dashboard" loading="lazy" />
-        <div class="gallery-overlay">
-          <div class="gallery-tag">KPI</div>
-          <div class="gallery-caption">Análisis de Datos y Reportes</div>
-        </div>
-      </div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&q=80" loading="lazy" alt=""/><div class="gallery-overlay"><div class="gallery-tag">Almacenaje</div><div class="gallery-caption">Centros de Distribución</div></div></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=800&q=80" loading="lazy" alt=""/><div class="gallery-overlay"><div class="gallery-tag">Flota</div><div class="gallery-caption">Gestión de Flota y Transporte</div></div></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1553413077-190dd305871c?w=800&q=80" loading="lazy" alt=""/><div class="gallery-overlay"><div class="gallery-tag">Tecnología</div><div class="gallery-caption">Control y Analítica Operacional</div></div></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1519003722824-194d4455a60c?w=800&q=80" loading="lazy" alt=""/><div class="gallery-overlay"><div class="gallery-tag">WMS</div><div class="gallery-caption">Operaciones de Bodega</div></div></div>
+      <div class="gallery-item"><img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&q=80" loading="lazy" alt=""/><div class="gallery-overlay"><div class="gallery-tag">KPI</div><div class="gallery-caption">Análisis de Datos y Reportes</div></div></div>
     </div>
   </section>
-
 </main>
 
-<!-- FOOTER -->
 <footer>
-  <div class="footer-name">BENJAMÍN MERLET</div>
-  <div class="footer-sub">Ingeniero Comercial · Operaciones & Logística</div>
+  <div class="footer-name">BENJAMÍN MERLET ARRIETA</div>
+  <div class="footer-sub">Ingeniero Comercial · Operaciones &amp; Logística</div>
   <div class="footer-links">
-    <a class="footer-link" href="https://wa.me/56982511566" target="_blank">
-      <i class="fab fa-whatsapp"></i> +56 9 8251 1566
-    </a>
-    <a class="footer-link" href="mailto:benjamerlet@gmail.com">
-      <i class="fas fa-envelope"></i> benjamerlet@gmail.com
-    </a>
-    <a class="footer-link" href="#" target="_blank">
-      <i class="fab fa-linkedin"></i> LinkedIn
-    </a>
-    <a class="footer-link" href="#">
-      <i class="fas fa-map-marker-alt"></i> Santiago, Chile
-    </a>
+    <a class="footer-link" href="https://wa.me/56982511566" target="_blank"><i class="fab fa-whatsapp"></i> +56 9 8251 1566</a>
+    <a class="footer-link" href="mailto:benjamerlet@gmail.com"><i class="fas fa-envelope"></i> benjamerlet@gmail.com</a>
+    <a class="footer-link" href="#" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
+    <a class="footer-link" href="#"><i class="fas fa-map-marker-alt"></i> Santiago, Chile</a>
   </div>
-  <div class="footer-copy">© 2025 · Benjamín Merlet · Todos los derechos reservados</div>
+  <div class="footer-copy">© 2025 · Benjamín Merlet Arrieta · Todos los derechos reservados</div>
 </footer>
 
-<!-- FAB -->
 <div class="fab-wrap">
   <div class="fab-menu" id="fabMenu">
-    <a href="https://wa.me/56982511566" target="_blank" class="fab-option">
-      <i class="fab fa-whatsapp"></i> WhatsApp
-    </a>
-    <a href="mailto:benjamerlet@gmail.com" class="fab-option">
-      <i class="fas fa-envelope"></i> Correo
-    </a>
-    <a href="#" target="_blank" class="fab-option">
-      <i class="fab fa-linkedin"></i> LinkedIn
-    </a>
+    <a href="https://wa.me/56982511566" target="_blank" class="fab-option"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+    <a href="mailto:benjamerlet@gmail.com" class="fab-option"><i class="fas fa-envelope"></i> Correo</a>
+    <a href="#" target="_blank" class="fab-option"><i class="fab fa-linkedin"></i> LinkedIn</a>
   </div>
-  <button class="fab-btn" id="fabBtn" onclick="toggleFAB()">
-    <i class="fas fa-plus" id="fabIcon"></i>
-  </button>
+  <button class="fab-btn" id="fabBtn" onclick="toggleFAB()"><i class="fas fa-plus" id="fabIcon"></i></button>
 </div>
 
-<!-- ========================
-     SCRIPTS
-======================== -->
 <script>
-/* ---------- SPLASH ---------- */
-window.addEventListener('load', () => {
-  setTimeout(() => {
-    document.getElementById('splash').classList.add('hide');
-    startTypewriter();
-  }, 2200);
-});
-
-/* ---------- PARTICLES ---------- */
-const canvas = document.getElementById('particles');
-const ctx = canvas.getContext('2d');
-let W, H, particles = [];
-
-function resize() {
-  W = canvas.width  = window.innerWidth;
-  H = canvas.height = window.innerHeight;
-}
-resize();
-window.addEventListener('resize', resize);
-
-function Particle() {
-  this.x = Math.random() * W;
-  this.y = Math.random() * H;
-  this.vx = (Math.random() - 0.5) * 0.35;
-  this.vy = (Math.random() - 0.5) * 0.35;
-  this.r  = Math.random() * 1.4 + 0.3;
-  this.a  = Math.random() * 0.5 + 0.15;
-}
-for (let i = 0; i < 110; i++) particles.push(new Particle());
-
-function drawParticles() {
-  ctx.clearRect(0, 0, W, H);
-  particles.forEach(p => {
-    p.x += p.vx; p.y += p.vy;
-    if (p.x < 0 || p.x > W) p.vx *= -1;
-    if (p.y < 0 || p.y > H) p.vy *= -1;
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(0,229,255,${p.a})`;
-    ctx.fill();
-  });
-  // Líneas de conexión
-  for (let i = 0; i < particles.length; i++) {
-    for (let j = i + 1; j < particles.length; j++) {
-      const dx = particles[i].x - particles[j].x;
-      const dy = particles[i].y - particles[j].y;
-      const d  = Math.sqrt(dx*dx + dy*dy);
-      if (d < 100) {
-        ctx.beginPath();
-        ctx.moveTo(particles[i].x, particles[i].y);
-        ctx.lineTo(particles[j].x, particles[j].y);
-        ctx.strokeStyle = `rgba(0,229,255,${0.08 * (1 - d/100)})`;
-        ctx.lineWidth = 0.5;
-        ctx.stroke();
-      }
-    }
-  }
+window.addEventListener("load",()=>{setTimeout(()=>{document.getElementById("splash").classList.add("hide");startTypewriter();},2200);});
+const canvas=document.getElementById("particles"),ctx=canvas.getContext("2d");
+let W,H,particles=[];
+function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+resize();window.addEventListener("resize",resize);
+function Particle(){this.x=Math.random()*W;this.y=Math.random()*H;this.vx=(Math.random()-.5)*.35;this.vy=(Math.random()-.5)*.35;this.r=Math.random()*1.4+.3;this.a=Math.random()*.5+.15;}
+for(let i=0;i<110;i++)particles.push(new Particle());
+function drawParticles(){
+  ctx.clearRect(0,0,W,H);
+  particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=`rgba(0,229,255,${p.a})`;ctx.fill();});
+  for(let i=0;i<particles.length;i++)for(let j=i+1;j<particles.length;j++){const dx=particles[i].x-particles[j].x,dy=particles[i].y-particles[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<100){ctx.beginPath();ctx.moveTo(particles[i].x,particles[i].y);ctx.lineTo(particles[j].x,particles[j].y);ctx.strokeStyle=`rgba(0,229,255,${.08*(1-d/100)})`;ctx.lineWidth=.5;ctx.stroke();}}
   requestAnimationFrame(drawParticles);
 }
 drawParticles();
-
-/* ---------- TYPEWRITER ---------- */
-const phrases = [
-  'Ingeniero Comercial',
-  'Operaciones & Logística',
-  'Gestión de Flota',
-  'Analítica Operacional',
-  'Mejora Continua'
-];
-let pi = 0, ci = 0, deleting = false;
-const tw = document.getElementById('typewriter');
-
-function startTypewriter() {
-  if (!tw) return;
-  function tick() {
-    const full = phrases[pi];
-    if (!deleting) {
-      tw.textContent = full.slice(0, ++ci);
-      if (ci === full.length) { deleting = true; setTimeout(tick, 1800); return; }
-    } else {
-      tw.textContent = full.slice(0, --ci);
-      if (ci === 0) { deleting = false; pi = (pi + 1) % phrases.length; }
-    }
-    setTimeout(tick, deleting ? 55 : 90);
-  }
-  tick();
-}
-
-/* ---------- SKILLS ---------- */
-const skills = [
-  { name:'WMS (Key User)',       icon:'fa-cubes',        pct:95 },
-  { name:'HIVETIRE',             icon:'fa-tire',         pct:92 },
-  { name:'Excel Avanzado',       icon:'fa-file-excel',   pct:88 },
-  { name:'Power BI',             icon:'fa-chart-bar',    pct:75 },
-  { name:'SQL',                  icon:'fa-database',     pct:68 },
-  { name:'ISO 9001:2015',        icon:'fa-certificate',  pct:85 },
-  { name:'IA Aplicada',          icon:'fa-robot',        pct:80 },
-  { name:'Gestión de Inventarios',icon:'fa-boxes-stacked',pct:93 },
-  { name:'KPI & Reportería',     icon:'fa-chart-line',   pct:90 },
-  { name:'Mantenimiento Flota',  icon:'fa-truck',        pct:87 },
-];
-
-const grid = document.getElementById('skillsGrid');
-skills.forEach((s, i) => {
-  const el = document.createElement('div');
-  el.className = 'skill-bar-wrap reveal' + (i%3 ? ` reveal-delay-${i%3}` : '');
-  el.innerHTML = `
-    <div class="skill-top">
-      <div class="skill-name"><i class="fas ${s.icon}"></i>${s.name}</div>
-      <div class="skill-pct">${s.pct}%</div>
-    </div>
-    <div class="skill-track">
-      <div class="skill-fill" data-pct="${s.pct}"></div>
-    </div>`;
-  grid.appendChild(el);
-});
-
-/* ---------- SCROLL REVEAL ---------- */
-const io = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.classList.add('visible');
-      // Animar barras de skills
-      e.target.querySelectorAll('.skill-fill').forEach(bar => {
-        bar.style.width = bar.dataset.pct + '%';
-      });
-      // También animar si la barra está en un padre ya visible
-    }
-  });
-}, { threshold: 0.12 });
-
-document.querySelectorAll('.reveal').forEach(el => io.observe(el));
-
-// Animar skills que ya están en view
-document.querySelectorAll('.skill-fill').forEach(bar => {
-  const wrap = bar.closest('.skill-bar-wrap');
-  if (wrap && wrap.classList.contains('visible')) {
-    bar.style.width = bar.dataset.pct + '%';
-  }
-});
-
-/* ---------- TIMELINE TOGGLE ---------- */
-function toggleTL(card) {
-  const details = card.querySelector('.tl-details');
-  const icon    = card.querySelector('.tl-toggle i');
-  const toggle  = card.querySelector('.tl-toggle');
-  const isOpen  = details.classList.contains('open');
-  // Cerrar todos
-  document.querySelectorAll('.tl-details.open').forEach(d => {
-    d.classList.remove('open');
-    d.closest('.tl-card').querySelector('.tl-toggle i').className = 'fas fa-chevron-down';
-    d.closest('.tl-card').querySelector('.tl-toggle').childNodes[1].textContent = ' Ver logros';
-  });
-  if (!isOpen) {
-    details.classList.add('open');
-    icon.className = 'fas fa-chevron-up';
-    toggle.childNodes[1].textContent = ' Ocultar';
-  }
-}
-
-/* ---------- FAB ---------- */
-function toggleFAB() {
-  const menu = document.getElementById('fabMenu');
-  const btn  = document.getElementById('fabBtn');
-  const icon = document.getElementById('fabIcon');
-  menu.classList.toggle('open');
-  btn.classList.toggle('active');
-  icon.className = menu.classList.contains('open') ? 'fas fa-times' : 'fas fa-plus';
-}
-document.addEventListener('click', (e) => {
-  if (!e.target.closest('.fab-wrap')) {
-    document.getElementById('fabMenu').classList.remove('open');
-    document.getElementById('fabBtn').classList.remove('active');
-    document.getElementById('fabIcon').className = 'fas fa-plus';
-  }
-});
+const phrases=["Ingeniero Comercial","Operaciones & Logística","Gestión de Flota","Analítica Operacional","Mejora Continua"];
+let pi=0,ci=0,deleting=false;
+const tw=document.getElementById("typewriter");
+function startTypewriter(){function tick(){const full=phrases[pi];if(!deleting){tw.textContent=full.slice(0,++ci);if(ci===full.length){deleting=true;setTimeout(tick,1800);return;}}else{tw.textContent=full.slice(0,--ci);if(ci===0){deleting=false;pi=(pi+1)%phrases.length;}}setTimeout(tick,deleting?55:90);}tick();}
+const skills=[{name:"WMS (Key User)",icon:"fa-cubes",pct:95},{name:"HIVETIRE",icon:"fa-tire",pct:92},{name:"Excel Avanzado",icon:"fa-file-excel",pct:88},{name:"Power BI",icon:"fa-chart-bar",pct:75},{name:"SQL",icon:"fa-database",pct:68},{name:"ISO 9001:2015",icon:"fa-certificate",pct:85},{name:"IA Aplicada",icon:"fa-robot",pct:80},{name:"Gestión de Inventarios",icon:"fa-boxes-stacked",pct:93},{name:"KPI & Reportería",icon:"fa-chart-line",pct:90},{name:"Mantenimiento Flota",icon:"fa-truck",pct:87}];
+const grid=document.getElementById("skillsGrid");
+skills.forEach((s,i)=>{const el=document.createElement("div");el.className="skill-bar-wrap reveal"+(i%3?` reveal-delay-${i%3}`:"");el.innerHTML=`<div class="skill-top"><div class="skill-name"><i class="fas ${s.icon}"></i>${s.name}</div><div class="skill-pct">${s.pct}%</div></div><div class="skill-track"><div class="skill-fill" data-pct="${s.pct}"></div></div>`;grid.appendChild(el);});
+const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add("visible");e.target.querySelectorAll(".skill-fill").forEach(b=>b.style.width=b.dataset.pct+"%");}});},{threshold:.12});
+document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
+function toggleTL(card){const details=card.querySelector(".tl-details"),icon=card.querySelector(".tl-toggle i"),toggle=card.querySelector(".tl-toggle"),isOpen=details.classList.contains("open");document.querySelectorAll(".tl-details.open").forEach(d=>{d.classList.remove("open");d.closest(".tl-card").querySelector(".tl-toggle i").className="fas fa-chevron-down";d.closest(".tl-card").querySelector(".tl-toggle").childNodes[1].textContent=" Ver logros";});if(!isOpen){details.classList.add("open");icon.className="fas fa-chevron-up";toggle.childNodes[1].textContent=" Ocultar";}}
+function toggleFAB(){const menu=document.getElementById("fabMenu"),btn=document.getElementById("fabBtn"),icon=document.getElementById("fabIcon");menu.classList.toggle("open");btn.classList.toggle("active");icon.className=menu.classList.contains("open")?"fas fa-times":"fas fa-plus";}
+document.addEventListener("click",e=>{if(!e.target.closest(".fab-wrap")){document.getElementById("fabMenu").classList.remove("open");document.getElementById("fabBtn").classList.remove("active");document.getElementById("fabIcon").className="fas fa-plus";}});
 </script>
-
-<!--
-====================================================
-  INSTRUCCIONES PARA PUBLICAR Y GENERAR QR
-====================================================
-
-1. SUBIR A GITHUB PAGES (GRATIS):
-   a) Crea una cuenta en https://github.com si no tienes una.
-   b) Crea un repositorio nuevo → New repository.
-   c) Nómbralo: "mi-portafolio" (o como prefieras).
-   d) Marca la opción "Add a README file" y crea el repo.
-   e) Haz clic en "Add file" → "Upload files" y sube este archivo index.html.
-   f) Ve a Settings → Pages → Source: selecciona "main" y carpeta raíz "/".
-   g) GitHub te dará una URL del tipo: https://tuusuario.github.io/mi-portafolio/
-   h) ¡Esa es la URL de tu página!
-
-2. GENERAR EL CÓDIGO QR (GRATIS):
-   a) Ve a https://www.qr-code-generator.com o https://qr.io
-   b) Pega la URL de tu GitHub Pages.
-   c) Descarga el QR en PNG de alta resolución (mínimo 1000x1000 px).
-   d) Imprímelo en papel de al menos 6x6 cm para que sea fácil de escanear.
-
-3. TIP: Actualiza el link de LinkedIn en el footer y en el botón FAB
-   reemplazando el "#" por tu URL de perfil de LinkedIn.
-
-====================================================
--->
-
 </body>
 </html>
